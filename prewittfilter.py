@@ -11,6 +11,8 @@ orig_prewitt = Image.new("L", im.size, "black")
 imageW = im.size[0]
 imageH = im.size[1]
 
+putpixel = im.im.putpixel
+
 for y in range(0, imageH):
     for x in range(0, imageW):
         if y > 0 and y < imageH-1:
@@ -36,19 +38,13 @@ for y in range(0, imageH):
     for x in range(0, imageW):
         if y > 0 and y < imageH-1:
             if x > 0 and x < imageW-1:
-                p1 = im.getpixel((x-1, y-1))
-                p2 = im.getpixel((x, y-1))
-                p3 = im.getpixel((x+1, y-1))
-                p4 = im.getpixel((x-1, y))
+                mod_prewitt.putpixel((x, y-1), mod_prewitt.getpixel((x, y-1)) - im.getpixel((x, y)))
+                mod_prewitt.putpixel((x+1, y-1), mod_prewitt.getpixel((x+1, y-1)) - 2*im.getpixel((x, y)))
+                mod_prewitt.putpixel((x-1, y), mod_prewitt.getpixel((x-1, y)) - im.getpixel((x, y)))
 
-                p6 = im.getpixel((x+1, y))
-                p7 = im.getpixel((x-1, y+1))
-                p8 = im.getpixel((x, y+1))
-                p9 = im.getpixel((x+1, y+1))
-
-                res = p2 + (2*p3) - p4 + p6 - (2*p7) - p8
-                       
-                mod_prewitt.putpixel((x, y), res)
+                mod_prewitt.putpixel((x+1, y), mod_prewitt.getpixel((x+1, y)) + im.getpixel((x, y)))
+                mod_prewitt.putpixel((x-1, y+1), mod_prewitt.getpixel((x-1, y+1)) + 2*im.getpixel((x, y)))
+                mod_prewitt.putpixel((x, y+1), mod_prewitt.getpixel((x, y+1)) + im.getpixel((x, y)))
 
 mod_prewitt.show()
 
