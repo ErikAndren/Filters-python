@@ -33,13 +33,12 @@ for y in range(0, imageH):
                 prewitt.putpixel((x, y), res)
 
                 # Sobel calculation
-                res = (p1+(p2+p2)+p3-p7-(p8+p8)-p9)+(p3+(p6+p6)+p9-p1-(p4+p4)-p7)
+                res = (p1 + (p2 + p2) + p3 - p7 - (p8 + p8) - p9) + (p3 + (p6 + p6) + p9 -p1 - (p4 + p4) - p7)
                 sobel.putpixel((x, y), res)
 
 
 prewitt.show()
 sobel.show()
-# im.show()
 
 #mod_prewitt = Image.new("L", im.size, "black")
 
