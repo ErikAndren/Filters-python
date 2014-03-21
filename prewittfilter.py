@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # This script will implement the prewitt filter
 import Image
+import numpy
+numpy.set_printoptions(threshold=numpy.nan)
 
 im = Image.open("LENA512.BMP")
 
@@ -38,28 +40,40 @@ for y in range(0, imageH):
 
 
 prewitt.show()
-sobel.show()
+# sobel.show()
 
-#mod_prewitt = Image.new("L", im.size, "black")
+mod_prewitt = Image.new("L", im.size, "black")
 
-# WeightMatrix = [[0 for x in xrange(3)] for x in xrange(3)] 
-# # Initial implementation
-# WeightMatrix[1][0] = -4
-# WeightMatrix[2][0] = -8
-# WeightMatrix[2][1] = -4
+# print list(im.getdata())
+# mod_prewitt_list = list(im.getdata())
 
-# WeightMatrix[0][1] = 4
-# WeightMatrix[0][2] = 8
-# WeightMatrix[1][2] = 4
+mod_prewitt_matr = numpy.zeros((imageW, imageH))
 
-# for y in range(0, imageH):
-#     for x in range(0, imageW):
-#         if y > 0 and y < imageH-1:
-#             if x > 0 and x < imageW-1:
-#                 for a in range(-1, 1):
-#                     for b in range(-1, 1):
-#                         mod_prewitt.putpixel((x+b, y+a), mod_prewitt.getpixel((x+b, y+a)) + WeightMatrix[b+1][a+1]*im.getpixel((x, y)))
+#mod_prewitt_matr = numpy.array(im.getdata())
 
-# mod_prewitt.show()
+mod_prewitt_matr = numpy.reshape(mod_prewitt_matr, (imageW, imageH))
+print(mod_prewitt_matr.shape)
 
+WeightMatrix = [[0 for x in xrange(3)] for x in xrange(3)] 
+# Initial implementation
+WeightMatrix[1][0] = -1
+WeightMatrix[2][0] = -2
+WeightMatrix[2][1] = -1
 
+WeightMatrix[0][1] = 1
+WeightMatrix[0][2] = 2
+WeightMatrix[1][2] = 1
+
+for y in range(0, imageH):
+    for x in range(0, imageW):
+        if y > 0 and y < imageH-1:
+            if x > 0 and x < imageW-1:
+                for a in range(-1, 1):
+                    for b in range(-1, 1):
+                        mod_prewitt_matr[y+a, x+b] = mod_prewitt_matr[y+a, x+b] + WeightMatrix[a+1][b+1]*im.getpixel((x, y))
+                        # mod_prewitt.putpixel((x+b, y+a), mod_prewitt.getpixel((x+b, y+a)) + WeightMatrix[b+1][a+1]*im.getpixel((x, y)))
+                        # print "Pixel " + repr(x+b) + ", " + repr(y+a) + " contains " + repr(mod_prewitt.getpixel((x+b, y+a)))
+
+mod_prewitt = Image.fromarray(numpy.uint8(mod_prewitt_matr))
+mod_prewitt.show()
+#print repr(mod_prewitt_matr)
